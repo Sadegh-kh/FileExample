@@ -17,6 +17,8 @@
         <entry key="..\:/Job/android/git/FileExample/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Job/android/git/FileExample/app/src/main/res/layout/dialog_add_newfile.xml" value="0.25416666666666665" />
         <entry key="..\:/Job/android/git/FileExample/app/src/main/res/layout/dialog_add_newfolder.xml" value="0.20833333333333334" />
+        <entry key="..\:/Job/android/git/FileExample/app/src/main/res/layout/dialog_delete_file.xml" value="0.25416666666666665" />
+        <entry key="..\:/Job/android/git/FileExample/app/src/main/res/layout/dialog_delete_files.xml" value="0.25416666666666665" />
         <entry key="..\:/Job/android/git/FileExample/app/src/main/res/layout/dialogaddnewfolder.xml" value="0.253125" />
         <entry key="..\:/Job/android/git/FileExample/app/src/main/res/layout/fragment_file_list.xml" value="0.25" />
         <entry key="..\:/Job/android/git/FileExample/app/src/main/res/layout/item_file_linear.xml" value="0.253125" />

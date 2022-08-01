@@ -45,6 +45,10 @@ class RecyclerFileAdapter(private val fileList:ArrayList<File>,val fileEvent: Fi
                 }
 
             }
+            itemView.setOnLongClickListener {
+                fileEvent.onFileLongClick(file,adapterPosition)
+                true
+            }
         }
     }
 
@@ -78,9 +82,15 @@ class RecyclerFileAdapter(private val fileList:ArrayList<File>,val fileEvent: Fi
         fileList.add(0,file)
         notifyItemInserted(0)
     }
+
+    fun removeFile(file: File,position: Int){
+        fileList.remove(file)
+        notifyItemRemoved(position)
+    }
     interface FileEvent{
         fun onFileClick(file : File,type:String)
         fun onFolderClick(path: String)
+        fun onFileLongClick(file:File,position: Int)
     }
 
 }

@@ -17,6 +17,7 @@ import com.example.fileexample.R
 import com.example.fileexample.adapters.RecyclerFileAdapter
 import com.example.fileexample.databinding.DialogAddNewfileBinding
 import com.example.fileexample.databinding.DialogAddNewfolderBinding
+import com.example.fileexample.databinding.DialogDeleteFileBinding
 import com.example.fileexample.databinding.FragmentFileListBinding
 import java.io.File
 
@@ -168,6 +169,25 @@ class FileFragment(private val path: String) : Fragment(), RecyclerFileAdapter.F
         transaction.replace(R.id.LayoutMain, FileFragment(path))
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    override fun onFileLongClick(file: File, position: Int) {
+        val dialog=AlertDialog.Builder(context).create()
+        val dialogDeleteFileBinding=DialogDeleteFileBinding.inflate(layoutInflater)
+        dialog.setView(dialogDeleteFileBinding.root)
+        dialog.show()
+        dialogDeleteFileBinding.btnDelete.setOnClickListener {
+            if (file.exists()){
+                if (file.deleteRecursively()){
+                    adapter.removeFile(file,position)
+                }
+            }
+            dialog.dismiss()
+        }
+        dialogDeleteFileBinding.btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
     }
 }
 
