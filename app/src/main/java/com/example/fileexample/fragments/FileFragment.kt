@@ -1,5 +1,6 @@
 package com.example.fileexample.fragments
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -14,13 +15,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fileexample.R
 import com.example.fileexample.adapters.RecyclerFileAdapter
+import com.example.fileexample.databinding.DialogAddNewfileBinding
+import com.example.fileexample.databinding.DialogAddNewfolderBinding
 import com.example.fileexample.databinding.FragmentFileListBinding
 import java.io.File
-import java.util.ArrayList
 
 class FileFragment(private val path: String) : Fragment(), RecyclerFileAdapter.FileEvent {
     private var checkingLinearList = true
     lateinit var binding: FragmentFileListBinding
+    private lateinit var adapter:RecyclerFileAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,7 +42,7 @@ class FileFragment(private val path: String) : Fragment(), RecyclerFileAdapter.F
     private fun initUi(file: File) {
         binding.txtNamePath.text = file.name + ">"
         initActionBar()
-        initRecylcerView(file)
+        initRecyclerView(file)
 
     }
 
@@ -53,25 +56,83 @@ class FileFragment(private val path: String) : Fragment(), RecyclerFileAdapter.F
                 checkingLinearList = true
             }
         }
+
+        binding.btnAddFolder.setOnClickListener {
+            val dialog=AlertDialog.Builder(context).create()
+            val layoutDialogAddNewFolder=DialogAddNewfolderBinding.inflate(layoutInflater)
+            dialog.setView(layoutDialogAddNewFolder.root)
+            dialog.show()
+            layoutDialogAddNewFolder.btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+            layoutDialogAddNewFolder.btnCreate.setOnClickListener {
+                val nameFolder=layoutDialogAddNewFolder.editTxtFolderName.text.toString()
+
+                //file/nameFolder ( File.separator is mean / between file and nameFolder)
+                val newFile=File(path+File.separator+nameFolder)
+
+                if (!newFile.exists()){
+                    if (newFile.mkdir()){
+                        adapter.addFolder(newFile)
+                        binding.filesRecycler.scrollToPosition(0)
+
+                        binding.imgEmptyFileList.visibility=View.GONE
+                        binding.filesRecycler.visibility=View.VISIBLE
+                    }
+                    dialog.dismiss()
+                }else{
+                    Toast.makeText(context, "Folder exist!!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        binding.btnAddFile.setOnClickListener {
+            val dialog=AlertDialog.Builder(context).create()
+            val layoutDialogAddNewFile=DialogAddNewfileBinding.inflate(layoutInflater)
+            dialog.setView(layoutDialogAddNewFile.root)
+            dialog.show()
+            layoutDialogAddNewFile.btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+            layoutDialogAddNewFile.btnCreate.setOnClickListener {
+                val nameFolder=layoutDialogAddNewFile.editTxtFileName.text.toString()
+
+                //file/nameFolder ( File.separator is mean / between file and nameFolder)
+                val newFile=File(path+File.separator+nameFolder)
+
+                if (!newFile.exists()){
+                    if (newFile.createNewFile()){
+                        adapter.addFolder(newFile)
+                        binding.filesRecycler.scrollToPosition(0)
+
+                        binding.imgEmptyFileList.visibility=View.GONE
+                        binding.filesRecycler.visibility=View.VISIBLE
+
+                    }
+                    dialog.dismiss()
+                }else{
+                    Toast.makeText(context, "File exist!!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
     }
 
-    private fun initRecylcerView(file: File) {
+    private fun initRecyclerView(file: File) {
 
         //for check it's folder or file
         if (file.isDirectory) {
             val fileList = arrayListOf<File>()
             fileList.addAll(file.listFiles()!!)
-
+            adapter = RecyclerFileAdapter(fileList, this)
+            binding.filesRecycler.adapter = adapter
+            if (checkingLinearList) {
+                binding.filesRecycler.layoutManager = LinearLayoutManager(context)
+            } else {
+                binding.filesRecycler.layoutManager = GridLayoutManager(context, 3)
+            }
             //for visibility
             if (fileList.isNotEmpty()) {
-                val adapter = RecyclerFileAdapter(fileList, this)
-                binding.filesRecycler.adapter = adapter
-
-                if (checkingLinearList) {
-                    binding.filesRecycler.layoutManager = LinearLayoutManager(context)
-                } else {
-                    binding.filesRecycler.layoutManager = GridLayoutManager(context, 3)
-                }
 
                 binding.imgEmptyFileList.visibility = View.GONE
                 binding.filesRecycler.visibility = View.VISIBLE

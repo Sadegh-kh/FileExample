@@ -74,8 +74,13 @@ class RecyclerFileAdapter(private val fileList:ArrayList<File>,val fileEvent: Fi
         return name.contains(".zip")||name.contains(".rar")
     }
 
+    fun addFolder(file: File){
+        fileList.add(0,file)
+        notifyItemInserted(0)
+    }
     interface FileEvent{
         fun onFileClick(file : File,type:String)
         fun onFolderClick(path: String)
     }
+
 }
