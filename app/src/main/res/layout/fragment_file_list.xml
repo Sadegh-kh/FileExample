@@ -64,6 +64,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txt_name_path" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/filesRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
