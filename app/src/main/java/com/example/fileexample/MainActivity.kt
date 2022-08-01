@@ -9,22 +9,27 @@ import java.io.File
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+
+    companion object {
+        var ourViewType = 0
+        var ourSpanCount = 1
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding= ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         //External my app folder path
-        val file=getExternalFilesDir(null)!!
+        val file = getExternalFilesDir(null)!!
         val path = file.path
 
         //Folder download Path
-        val fileDownload=getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+        val fileDownload = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
 
 
-
-        val transaction=supportFragmentManager.beginTransaction()
-        transaction.add(R.id.LayoutMain,FileFragment(path))
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.add(R.id.LayoutMain, FileFragment(path))
         transaction.commit()
 
     }
